@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazeti Letu - Tovuti ya Habari na Magazeti</title>
+    <style>
+        /* RESET & GLOBAL STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 2.6;
+        }
+
+        /* GRID LAYOUT - PAGE STRUCTURE */
+        .page-container {
+            display: grid;
+            grid-template-areas: 
+                "header header"
+                "sidebar main"
+                "footer footer";
+            grid-template-columns: 320px 1fr;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        /* HEADER STYLES */
+        .header {
+            grid-area: header;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-bar input {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 25px;
+            width: 250px;
+            font-size: 0.9rem;
+        }
+
+        .search-bar button {
+            padding: 0.6rem 1.2rem;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-bar button:hover {
+            transform: scale(1.05);
+            background: #ff5722;
+        }
+
+        /* SIDEBAR - YOTE IMO HAPA NDANI */
+        .sidebar {
+            grid-area: sidebar;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        /* VIPENGELE VYA SIDEBAR - ZOTE ZIPO HAPA */
+        .sidebar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .sidebar-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-section h3 {
+            color: #1e3c72;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Kategoria list */
+        .category-list {
+            list-style: none;
+        }
+
+        .category-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: color 0.2s;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .category-list li:hover {
+            color: #ff6b35;
+            transform: translateX(5px);
+        }
+
+        .count {
+            background: #e0e0e0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        /* Posts zilizosomwa sana */
+        .popular-post {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .popular-post:hover {
+            background: #f0f0f0;
+        }
+
+        .popular-number {
+            background: #ff6b35;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .popular-title {
+            flex: 1;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Tag cloud */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #e9ecef;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background: #ff6b35;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Archives */
+        .archive-list {
+            list-style: none;
+        }
+
+        .archive-list li {
+            padding: 0.5rem 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Social links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-icon {
+            background: #1e3c72;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .social-icon:hover {
+            background: #ff6b35;
+            transform: translateY(-3px);
+        }
+
+        /* Newsletter sidebar */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .newsletter-form input {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .newsletter-form button {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            grid-area: main;
+            padding: 2rem;
+            background: white;
+        }
+
+        .featured-news {
+            margin-bottom: 2rem;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .featured-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-badge {
+            background: #ff6b35;
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        /* Posts grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        .post-image {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .post-content {
+            padding: 1.2rem;
+        }
+
+        .post-category {
+            color: #ff6b35;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .post-title {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #1e3c72;
+        }
+
+        .post-excerpt {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        /* FOOTER */
+        .footer {
+            grid-area: footer;
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* MODAL KWA POST DETAIL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 20px;
+            padding: 2rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-container {
+                grid-template-areas: 
+                    "header"
+                    "main"
+                    "sidebar"
+                    "footer";
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                border-right: none;
+                border-top: 1px solid #e0e0e0;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <h1>📰 Gazeti Letu</h1>
+                <b><p>Habari za kweli, kwa wakati</p>
+                <p> Imani yako | Jukumu Letu</p></b> 
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Tafuta habari...">
+                <button id="searchBtn">🔍 Tafuta</button>
+            </div>
+        </header>
+
+        <!-- SIDEBAR - VIPENGELE VYOTE VIPO HAPA NDANI -->
+        <aside class="sidebar">
+            <!-- 1. Kategoria -->
+            <div class="sidebar-section">
+                <h3>📚 Kategoria</h3>
+                <ul class="category-list" id="categoryList">
+                    <li>Taifa <span class="count">12</span></li>
+                    <li>Kimataifa <span class="count">8</span></li>
+                    <li>Teknolojia <span class="count">10</span></li>
+                    <li>Michezo <span class="count">6</span></li>
+                    <li>Burudani <span class="count">9</span></li>
+                    <li>Biashara <span class="count">7</span></li>
+                </ul>
+            </div>
+
+            <!-- 2. Posts maarufu (Most Read) -->
+            <div class="sidebar-section">
+                <h3>⭐ Maarufu Zaidi</h3>
+                <div class="popular-post" data-id="0">
+                    <div class="popular-number">1</div>
+                    <div class="popular-title">Rais atangaza mabadiliko makubwa serikalini</div>
+                </div>
+                <div class="popular-post" data-id="1">
+                    <div class="popular-number">2</div>
+                    <div class="popular-title">Teknolojia mpya ya 5G yafika nchini</div>
+                </div>
+                <div class="popular-post" data-id="2">
+                    <div class="popular-number">3</div>
+                    <div class="popular-title">Timu ya taifa iko tayari kwa ajili ya fainali</div>
+                </div>
+                <div class="popular-post" data-id="3">
+                    <div class="popular-number">4</div>
+                    <div class="popular-title">Bei za bidhaa zashuka kwa asilimia 15</div>
+                </div>
+                <div class="popular-post" data-id="4">
+                    <div class="popular-number">5</div>
+                    <div class="popular-title">Msanii maarufu atoa wimbo mpya leo</div>
+                </div>
+            </div>
+
+            <!-- 3. Tag Cloud -->
+            <div class="sidebar-section">
+                <h3>🏷️ Tag maarufu</h3>
+                <div class="tag-cloud">
+                    <span class="tag">#Siasa</span>
+                    <span class="tag">#Tech</span>
+                    <span class="tag">#Michezo</span>
+                    <span class="tag">#Burudani</span>
+                    <span class="tag">#Uchumi</span>
+                    <span class="tag">#Afya</span>
+                    <span class="tag">#Elimu</span>
+                    <span class="tag">#Usafiri</span>
+                    <span class="tag">#Kilimo</span>
+                </div>
+            </div>
+
+            <!-- 4. Kumbukumbu (Archives) -->
+            <div class="sidebar-section">
+                <h3>📅 Kumbukumbu</h3>
+                <ul class="archive-list">
+                    <li>Januari 2026 <span>14 posts</span></li>
+                    <li>Desemba 2025 <span>23 posts</span></li>
+                    <li>Novemba 2025 <span>18 posts</span></li>
+                    <li>Oktoba 2025 <span>20 posts</span></li>
+                </ul>
+            </div>
+
+            <!-- 5. Newsletter (Jiunge) -->
+            <div class="sidebar-section">
+                <h3>✉️ Jiunge Nasi</h3>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Barua pepe yako" required id="newsletterEmail">
+                    <button type="submit">Jiunge Sasa</button>
+                </form>
+            </div>
+
+            <!-- 6. Social Media Links -->
+            <div class="sidebar-section">
+                <h3>🔗 Tuungane</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📸</a>
+                    <a href="#" class="social-icon">▶️</a>
+                </div>
+            </div>
+
+            <!-- 7. Takwimu za tovuti -->
+            <div class="sidebar-section">
+                <h3>📊 Takwimu</h3>
+                <p>👤  Wasomaji leo: <strong>2,847</strong></p>
+                <p>📚  Makala jumla: <strong>52</strong></p>
+                <p>👤  Waliopo sasa: <strong>124</strong></p>
+                <p>👤  Maoni jumla: <strong>1,203</strong></p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT - MAGAZETI POSTS -->
+        <main class="main-content">
+            <div class="featured-news">
+                <div class="featured-card">
+                    <h2>🔥 Habari Kuu: Mabadiliko ya Sera za Nchi</h2>
+                    <p>Serikali imetangaza mabadiliko makubwa katika sekta ya elimu na afya kuanzia mwezi ujao. Wataalam wanatarajia ukuaji wa uchumi.</p>
+                    <span class="featured-badge">📌 Habari za Leo</span>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 1rem;">📰 Magazeti na Makala</h2>
+            <div class="posts-grid" id="postsGrid">
+                <!-- Posts zitaingizwa hapa na JavaScript -->
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>&copy; 2026 Gazeti Letu - Haki zote zimehifadhiwa. Habari za kuaminika kutoka kwa wataalamu.</p>
+            <p>Trust and Love is Our Slogan</p>
+          <p>Developed by Benny Jr</p>
+        </footer>
+    </div>
+
+    <!-- MODAL KWA POST DETAIL -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalCategory" style="color:#ff6b35; margin:10px 0;"></p>
+            <p id="modalContent"></p>
+            <small id="modalDate"></small>
+        </div>
+    </div>
+
+    <script>
+        // DATA ZA MAGAZETI (POSTS ZOTE)
+        const posts = [
+            { id: 0, title: "Rais atangaza mabadiliko makubwa serikalini", category: "Taifa", excerpt: "Rais amefanya mabadiliko ya mawaziri na kuanzisha wizara mpya...", fullContent: "Rais amesema mabadiliko haya yataleta maendeleo makubwa nchini. Mawaziri wapya wameapishwa leo na wataanza kazi yao mara moja. Wananchi wanatarajia mageuzi chanya katika sekta mbalimbali.", date: "Jan 15, 2026", imageIcon: "🏛️" },
+            { id: 1, title: "Teknolojia mpya ya 5G yafika nchini", category: "Teknolojia", excerpt: "Kampuni ya mawasiliano yazindua huduma za 5G kwa mara ya kwanza...", fullContent: "Huduma za 5G zimeanza rasmi katika miji mikuu. Wataalamu wanatarajia kasi ya mtandao kuongezeka mara 100. Hii itasaidia uchumi wa kidijitali na ubunifu wa kiteknolojia.", date: "Jan 14, 2026", imageIcon: "📡" },
+            { id: 2, title: "Timu ya taifa iko tayari kwa ajili ya fainali", category: "Michezo", excerpt: "Kocha amethibitisha orodha ya wachezaji 23 watakaocheza fainali...", fullContent: "Timu ya taifa imefanya mazoezi ya mwisho kabla ya fainali. Kocha amewataka mashabiki kuwa na imani na timu. Mechi itachezwa Jumamosi ijayo kwenye uwanja mkuu.", date: "Jan 13, 2026", imageIcon: "⚽" },
+            { id: 3, title: "Bei za bidhaa zashuka kwa asilimia 15", category: "Biashara", excerpt: "Serikali imepunguza ushuru wa bidhaa muhimu na kusababisha kushuka kwa bei...", fullContent: "Bei za unga, mchele na sukari zimepungua sokoni. Wananchi wamepokea kwa furaha hatua hii ya serikali. Wachumi wanatabiri mwelekeo mzuri wa uchumi.", date: "Jan 12, 2026", imageIcon: "📉" },
+            { id: 4, title: "Msanii maarufu atoa wimbo mpya leo", category: "Burudani", excerpt: "Baada ya kusubiri kwa muda, msanii anazindua wimbo wake unaotarajiwa...", fullContent: "Wimbo mpya umevunja rekodi za kuangaliwa ndani ya masaa 24. Mashabiki wameupokea vyema na wanasema ni wimbo wa mwaka. Msanii amewashukuru mashabiki kwa upendo wao.", date: "Jan 11, 2026", imageIcon: "🎵" },
+            { id: 5, title: "Mkutano wa kilele wa nchi za Afrika", category: "Kimataifa", excerpt: "Marais wa Afrika wakusanyika kujadili biashara na amani...", fullContent: "Mkutano wa nchi za Afrika umefunguliwa leo na mwenyeji wake. Mada kuu ni ushirikiano wa kiuchumi na usalama barani. Uamuzi mkubwa unatarajiwa kutangazwa kesho.", date: "Jan 10, 2026", imageIcon: "🌍" },
+            { id: 6, title: "Uzinduzi wa gari la umeme la kwanza", category: "Teknolojia", excerpt: "Kampuni ya ndani yazindua gari la umeme linalotengenezwa hapa nchini...", fullContent: "Gari hilo la umeme linaweza kukimbia kilomita 400 kwa chaji moja. Waziri wa viwanda amesema hii ni hatua kubwa kuelekea nishati safi. Uzalishaji utaanza mwezi ujao.", date: "Jan 9, 2026", imageIcon: "🚗" },
+            { id: 7, title: "Wanafunzi 10,000 wapata ufadhili wa masomo", category: "Taifa", excerpt: "Serikali imetoa fursa kwa wanafunzi kusomea vyuo vikuu nchini na nje...", fullContent: "Ufadhili huo unalenga kusaidia wanafunzi wenye kipato kidogo na wenye ufaulu mkubwa. Maombi yataanza wiki ijayo kupitia mtandao wa serikali.", date: "Jan 8, 2026", imageIcon: "🎓" }
+        ];
+
+        // RENDER POSTS KWENYE GRID
+        function renderPosts(filterCategory = "All", searchTerm = "") {
+            const postsGrid = document.getElementById("postsGrid");
+            postsGrid.innerHTML = "";
+
+            let filteredPosts = posts;
+            if (filterCategory !== "All") {
+                filteredPosts = filteredPosts.filter(post => post.category === filterCategory);
+            }
+            if (searchTerm !== "") {
+                filteredPosts = filteredPosts.filter(post => post.title.toLowerCase().includes(searchTerm.toLowerCase()) || post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()));
+            }
+
+            if (filteredPosts.length === 0) {
+                postsGrid.innerHTML = "<p>Hakuna post zilizopatikana. Jaribu kategoria nyingine.</p>";
+                return;
+            }
+
+            filteredPosts.forEach(post => {
+                const postCard = document.createElement("div");
+                postCard.className = "post-card";
+                postCard.setAttribute("data-id", post.id);
+                postCard.innerHTML = `
+                    <div class="post-image">${post.imageIcon}</div>
+                    <div class="post-content">
+                        <div class="post-category">${post.category}</div>
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.excerpt}</p>
+                        <div class="post-meta">
+                            <span>📅 ${post.date}</span>
+                            <span>👁️ ${Math.floor(Math.random() * 500) + 50} views</span>
+                        </div>
+                    </div>
+                `;
+                postCard.addEventListener("click", () => openModal(post.id));
+                postsGrid.appendChild(postCard);
+            });
+        }
+
+        // MODAL KUFUNGUA POST KAMILI
+        function openModal(id) {
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                document.getElementById("modalTitle").innerText = post.title;
+                document.getElementById("modalCategory").innerHTML = `📌 ${post.category}`;
+                document.getElementById("modalContent").innerHTML = `<strong>${post.fullContent}</strong><br><br>${post.excerpt} Maelezo zaidi: ${post.fullContent} Hii ni toleo kamili la gazeti letu. Asante kwa kusoma!`;
+                document.getElementById("modalDate").innerHTML = `Ilichapishwa: ${post.date}`;
+                document.getElementById("postModal").style.display = "flex";
+            }
+        }
+
+        // CLOSE MODAL
+        document.querySelector(".modal-close").addEventListener("click", () => {
+            document.getElementById("postModal").style.display = "none";
+        });
+        window.addEventListener("click", (e) => {
+            if (e.target === document.getElementById("postModal")) {
+                document.getElementById("postModal").style.display = "none";
+            }
+        });
+
+        // SIDEBAR INTERACTIONS - Kategoria Filter
+        const categoryItems = document.querySelectorAll("#categoryList li");
+        categoryItems.forEach(item => {
+            item.addEventListener("click", () => {
+                const category = item.innerText.split(" ")[0];
+                renderPosts(category, "");
+            });
+        });
+
+        // Popular posts click
+        document.querySelectorAll(".popular-post").forEach(pop => {
+            pop.addEventListener("click", () => {
+                const id = parseInt(pop.getAttribute("data-id"));
+                if (!isNaN(id)) openModal(id);
+            });
+        });
+
+        // Tag click
+        document.querySelectorAll(".tag").forEach(tag => {
+            tag.addEventListener("click", () => {
+                const tagText = tag.innerText.replace("#", "");
+                renderPosts("All", tagText);
+            });
+        });
+
+        // Search functionality
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const searchTerm = document.getElementById("searchInput").value;
+            renderPosts("All", searchTerm);
+        });
+        document.getElementById("searchInput").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                document.getElementById("searchBtn").click();
+            }
+        });
+
+        // Newsletter submission
+        document.getElementById("newsletterForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("newsletterEmail").value;
+            alert(`Asante ${email}! Umejiunga kikamilifu na gazeti letu. Utapata habari kila siku.`);
+            document.getElementById("newsletterEmail").value = "";
+        });
+
+        // Archive click
+        document.querySelectorAll(".archive-list li").forEach(archive => {
+            archive.addEventListener("click", () => {
+                alert("Kumbukumbu: Hizi ni post za zamani. Tunazirekebisha kwa ajili yako.");
+            });
+        });
+
+        // INITIAL RENDER
+        renderPosts("All", "");
+    </script>
+</body>
+</html>
